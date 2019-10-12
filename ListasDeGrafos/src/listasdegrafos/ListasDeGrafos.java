@@ -8,16 +8,67 @@ public class ListasDeGrafos {
 
     public static void main(String[] args) {
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
-        int pai[];
-        grafo.iniciaBuscaEmProfundidade(0);
-        pai = grafo.getVerticePai();
+        int pai[], distancia[];
+        distancia = grafo.iniciaCaminhoMaisCurto(0);
+        pai = grafo.getVerticeAntecessorCMC();
         
+        System.out.println("Vetor de pais:");
         for(int i=0; i<pai.length; i++){
             System.out.println(pai[i]);
         }
+        
         System.out.println("");
-        for(int i=0; i<pai.length; i++){
-            System.out.println(grafo.getDistanciaProfundidade()[i]);
+        System.out.println("Caminho mais curto:");
+        listaCMC(pai, distancia, 0);
+        //System.out.println("");
+        //listaCMC(pai, distancia[7], 0, 7);
+    }
+    
+    /**
+    * Lista todos os caminhos a partir do verticeInicial
+    */
+    public static void listaCMC(int pai[], int distancias[], int verticeInicial) {
+        int caminho[] = new int[pai.length];
+        for(int i=0; i<pai.length; i++) {
+            System.out.println(verticeInicial + " -> " + i + " custo: " + distancias[i]);
+            if (distancias[i] == Integer.MAX_VALUE){
+                System.out.println("Não contém pai");
+            } else {
+                caminho[0] = i;
+                int j=1, pap = pai[i];
+                while(pap!=-1) {
+                    caminho[j] = pap;
+                    pap = pai[pap];
+                    j++;
+                }
+                while(j!=0) {
+                    System.out.print(caminho[--j] + " ");
+                }
+                System.out.println("");
+            }
+        }
+    }
+    
+    /**
+    * Lista apenas um caminho a partir do verticeInicial
+    */
+    public static void listaCMC(int pai[], int distancia, int verticeInicial,int verticeFinal) {
+        int caminho[] = new int[pai.length];
+        System.out.println(verticeInicial + " -> " + verticeFinal + " custo: " + distancia);
+        if (distancia == Integer.MAX_VALUE){
+            System.out.println("Não contém pai");
+        } else {
+            caminho[0] = verticeFinal;
+            int j=1, pap = pai[verticeFinal];
+            while(pap!=-1) {
+                caminho[j] = pap;
+                pap = pai[pap];
+                j++;
+            }
+            while(j!=0) {
+                System.out.print(caminho[--j] + " ");
+            }
+            System.out.println("");
         }
     }
     

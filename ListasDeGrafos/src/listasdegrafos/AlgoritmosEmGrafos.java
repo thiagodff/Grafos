@@ -6,6 +6,7 @@ public class AlgoritmosEmGrafos extends Grafos {
     private final int[] verticePredecessor;
     private final int[] distanciasCMC; // CMC-> Caminho Mais Curto
     private final int[] verticeAntecessorCMC;
+    private final int[] verticeConhecidoCMC;
     
     public AlgoritmosEmGrafos(int vertices) {
         super(vertices);
@@ -13,12 +14,13 @@ public class AlgoritmosEmGrafos extends Grafos {
         verticePredecessor = new int[vertices];
         distanciasCMC = new int[vertices];
         verticeAntecessorCMC = new int[vertices];
+        verticeConhecidoCMC = new int[vertices];
     }
 
     // faz a busca em profundidade
     private void buscaProfundidade(int vertice) {
         for (int i = 0; i < distanciaProfundidade.length; i++) {
-            if (super.matrizAdjacencia[vertice][i] != 0 && distanciaProfundidade[i] == (distanciaProfundidade.length + 1)) {
+            if (super.matrizAdjacencia[vertice][i] != 0 && distanciaProfundidade[i] == Integer.MAX_VALUE) {
                 verticePredecessor[i] = vertice;
                 distanciaProfundidade[i] = distanciaProfundidade[vertice] + super.getPeso(vertice, i);
                 buscaProfundidade(i);
@@ -36,7 +38,7 @@ public class AlgoritmosEmGrafos extends Grafos {
         verticePredecessor[vertice] = vertice;
 
         for (int i = 0; i < distanciaProfundidade.length; i++) {
-            distanciaProfundidade[i] = distanciaProfundidade.length + 1;
+            distanciaProfundidade[i] = Integer.MAX_VALUE;
         }
 
         distanciaProfundidade[vertice] = 0;
@@ -46,8 +48,24 @@ public class AlgoritmosEmGrafos extends Grafos {
     
     // implementa o algoritmo de Dijkstra
     private void caminhoMaisCurto(int verticeInicial) {
+        int proxVertice = Integer.MAX_VALUE;
+        verticeConhecidoCMC[verticeInicial] = 1;
         
+        for (int i = 0; i < distanciasCMC.length; i++) {
+            if (super.matrizAdjacencia[verticeInicial][i] != 0 && i != verticeInicial){
+                if (distanciasCMC[i] > (distanciasCMC[verticeInicial] + super.getPeso(verticeInicial, i))) {
+                    distanciasCMC[i] = distanciasCMC[verticeInicial] + super.getPeso(verticeInicial, i);
+                    verticeAntecessorCMC[i] = verticeInicial;
+                }
+            }
+            if (proxVertice > distanciasCMC[i] && i != verticeInicial && verticeConhecidoCMC[i]==0) {
+                proxVertice = i;
+            }
+        }
         
+        if (proxVertice != Integer.MAX_VALUE) {
+            caminhoMaisCurto(proxVertice);
+        }
     }
 
     // calcula o caminho minimo entre dois vertices do grafo
@@ -60,12 +78,11 @@ public class AlgoritmosEmGrafos extends Grafos {
     public int[] iniciaCaminhoMaisCurto(int verticeInicial) {
         for(int i=0; i<distanciasCMC.length; i++) {
             verticeAntecessorCMC[i] = -1;
-            if (i != verticeInicial)
-                distanciasCMC[i] = 0;
-            else
-                distanciasCMC[i] = Integer.MAX_VALUE;
+            distanciasCMC[i] = Integer.MAX_VALUE;
+            verticeConhecidoCMC[i] = 0;
         }
         
+        distanciasCMC[verticeInicial] = 0;
         caminhoMaisCurto(verticeInicial);
         
         return distanciasCMC;
