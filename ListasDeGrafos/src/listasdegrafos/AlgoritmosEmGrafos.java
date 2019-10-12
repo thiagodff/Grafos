@@ -2,7 +2,7 @@ package listasdegrafos;
 
 public class AlgoritmosEmGrafos extends Grafos {
 
-    private final int[] distanciaProfundidade;
+    private final int[] distanciaProfundidade; // guarda a distancia busca em profundidade
     private final int[] verticePredecessor;
     private final int[] distanciasCMC; // CMC-> Caminho Mais Curto
     private final int[] verticeAntecessorCMC;
@@ -18,7 +18,7 @@ public class AlgoritmosEmGrafos extends Grafos {
     // faz a busca em profundidade
     private void buscaProfundidade(int vertice) {
         for (int i = 0; i < distanciaProfundidade.length; i++) {
-            if (super.matrizAdjacencia[vertice][i] != 0 && distanciaProfundidade[i] == distanciaProfundidade.length) {
+            if (super.matrizAdjacencia[vertice][i] != 0 && distanciaProfundidade[i] == (distanciaProfundidade.length + 1)) {
                 verticePredecessor[i] = vertice;
                 distanciaProfundidade[i] = distanciaProfundidade[vertice] + super.getPeso(vertice, i);
                 buscaProfundidade(i);
@@ -36,7 +36,7 @@ public class AlgoritmosEmGrafos extends Grafos {
         verticePredecessor[vertice] = vertice;
 
         for (int i = 0; i < distanciaProfundidade.length; i++) {
-            distanciaProfundidade[i] = distanciaProfundidade.length;
+            distanciaProfundidade[i] = distanciaProfundidade.length + 1;
         }
 
         distanciaProfundidade[vertice] = 0;

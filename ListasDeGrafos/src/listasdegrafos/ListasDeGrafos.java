@@ -15,6 +15,10 @@ public class ListasDeGrafos {
         for(int i=0; i<pai.length; i++){
             System.out.println(pai[i]);
         }
+        System.out.println("");
+        for(int i=0; i<pai.length; i++){
+            System.out.println(grafo.getDistanciaProfundidade()[i]);
+        }
     }
     
     public static AlgoritmosEmGrafos lerArquivo(String arg) {
