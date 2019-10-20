@@ -19,7 +19,7 @@ public class Grafos {
         }
     }
     
-    // adiciona um aresta no grafo com um dado peso
+    // adiciona uma aresta no grafo com um dado peso
     public void insereAresta(int vertice1, int vertice2, int peso) {
         matrizAdjacencia[vertice1][vertice2] = peso;
     }
@@ -41,6 +41,11 @@ public class Grafos {
         return listaAdj;
     }
 
+    // adiciona uma aresta não orientada na matriz de adjacência
+    public void insereArestaNaoOrientada(int vertice1, int vertice2, int peso) {
+        matrizAdjacencia[vertice1][vertice2] = peso;
+        matrizAdjacencia[vertice2][vertice1] = peso;
+    }
     // retorna o peso da aresta entre dois vertices contido na matriz de adjacencia
     public int getPeso(int vertice1, int vertice2) {
         return matrizAdjacencia[vertice1][vertice2];

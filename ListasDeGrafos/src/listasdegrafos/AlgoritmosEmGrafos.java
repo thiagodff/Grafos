@@ -1,5 +1,7 @@
 package listasdegrafos;
 
+import java.util.ArrayList;
+
 public class AlgoritmosEmGrafos extends Grafos {
 
     private final int[] distanciaProfundidade; // guarda a distancia busca em profundidade
@@ -7,6 +9,8 @@ public class AlgoritmosEmGrafos extends Grafos {
     private final int[] distanciasCMC; // CMC-> Caminho Mais Curto
     private final int[] verticeAntecessorCMC;
     private final int[] verticeConhecidoCMC;
+    //private final ArrayList < Pair < Integer, Integer >> arestasArvoreGeradoraMinima; 
+    private final int[] verticeAntecessorAGM;
     
     public AlgoritmosEmGrafos(int vertices) {
         super(vertices);
@@ -15,6 +19,8 @@ public class AlgoritmosEmGrafos extends Grafos {
         distanciasCMC = new int[vertices];
         verticeAntecessorCMC = new int[vertices];
         verticeConhecidoCMC = new int[vertices];
+        verticeAntecessorAGM = new int[vertices];
+        
     }
 
     // faz a busca em profundidade
@@ -87,6 +93,7 @@ public class AlgoritmosEmGrafos extends Grafos {
         
         return distanciasCMC;
     }
+    
     
     public int[] getVerticeAntecessorCMC() {
         return verticeAntecessorCMC;
