@@ -3,25 +3,30 @@ package listasdegrafos;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import javafx.util.Pair;
 
 public class ListasDeGrafos {
 
     public static void main(String[] args) {
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
-        int pai[], distancia[];
-        distancia = grafo.iniciaCaminhoMaisCurto(0);
-        pai = grafo.getVerticeAntecessorCMC();
+        ArrayList < Pair < Integer, Integer >> arestasAGM = new ArrayList<>();
+        Pair[] aux = new Pair[0];
+        int pai[];
+        
+        int peso = grafo.iniciaArvoreGeradoraMinima(0);
+        pai = grafo.getVerticeAntecessorAGM();
+        arestasAGM = grafo.getArestasAGM();
         
         System.out.println("Vetor de pais:");
         for(int i=0; i<pai.length; i++){
             System.out.println(pai[i]);
         }
         
-        System.out.println("");
-        System.out.println("Caminho mais curto:");
-        listaCMC(pai, distancia, 0);
-        //System.out.println("");
-        //listaCMC(pai, distancia[7], 0, 7);
+        System.out.println("\nPeso: " + peso + "\n");
+        for(Pair aresta : arestasAGM){
+            System.out.println(aresta.toString());
+        }
     }
     
     /**
@@ -91,7 +96,7 @@ public class ListasDeGrafos {
                 vertices[1] = Integer.parseInt(linha.split(" ")[1]);
                 peso = Integer.parseInt(linha.split(" ")[2]);
                 //System.out.println(vertices[0] + " " + vertices[1] + " " + peso);
-                grafo.insereAresta(vertices[0], vertices[1], peso);
+                grafo.insereArestaNaoOrientada(vertices[0], vertices[1], peso);
                 
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
