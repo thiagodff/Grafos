@@ -178,4 +178,8 @@ public class AlgoritmosEmGrafos extends Grafos {
     public int[] getVerticeAntecessorAGM() {
         return verticeAntecessorAGM;
     }
+    
+    public int[] getPesoAGM() {
+        return distanciasAGM;
+    }
 }

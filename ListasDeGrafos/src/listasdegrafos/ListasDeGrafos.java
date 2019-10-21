@@ -11,11 +11,12 @@ public class ListasDeGrafos {
     public static void main(String[] args) {
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
         ArrayList < Pair < Integer, Integer >> arestasAGM = new ArrayList<>();
-        Pair[] aux = new Pair[0];
         int pai[];
+        int distancias[];
         
-        int peso = grafo.iniciaArvoreGeradoraMinima(0);
+        int peso = grafo.iniciaArvoreGeradoraMinima(3);
         pai = grafo.getVerticeAntecessorAGM();
+        distancias = grafo.getPesoAGM();
         arestasAGM = grafo.getArestasAGM();
         
         System.out.println("Vetor de pais:");
@@ -23,7 +24,12 @@ public class ListasDeGrafos {
             System.out.println(pai[i]);
         }
         
-        System.out.println("\nPeso: " + peso + "\n");
+        System.out.println("\nPesos:");
+        for(int i=0; i<pai.length; i++){
+            System.out.println(distancias[i]);
+        }
+        
+        System.out.println("\nPeso total: " + peso + "\n");
         for(Pair aresta : arestasAGM){
             System.out.println(aresta.toString());
         }
