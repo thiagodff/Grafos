@@ -46,6 +46,12 @@ public class Grafos {
         matrizAdjacencia[vertice1][vertice2] = peso;
         matrizAdjacencia[vertice2][vertice1] = peso;
     }
+    
+    // altera o peso de uma aresta do grafo
+    public void setPeso(int vertice1, int vertice2, int peso) {
+        matrizAdjacencia[vertice1][vertice2] = peso;
+    }
+
     // retorna o peso da aresta entre dois vertices contido na matriz de adjacencia
     public int getPeso(int vertice1, int vertice2) {
         return matrizAdjacencia[vertice1][vertice2];

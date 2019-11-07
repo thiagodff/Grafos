@@ -13,6 +13,8 @@ public class AlgoritmosEmGrafos extends Grafos {
     private final ArrayList < Pair < Integer, Integer >> arestasArvoreGeradoraMinima; 
     private final int[] verticeAntecessorAGM;
     private final int[] distanciasAGM;
+    private final ArrayList < ArrayList < Integer >> caminhosDeAumentoFR; //armazena caminhos de aumento
+    private final ArrayList < Integer > capacidadeResidual; //guarda aresta de menor peso em cada caminho de aumento
     
     public AlgoritmosEmGrafos(int vertices) {
         super(vertices);
