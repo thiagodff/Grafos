@@ -5,6 +5,7 @@ import javafx.util.Pair;
 
 public class AlgoritmosEmGrafos extends Grafos {
 
+    private final int verticesTotais;
     private final int[] distanciaProfundidade; // guarda a distancia busca em profundidade
     private final int[] verticePredecessor;
     private final int[] distanciasCMC; // CMC-> Caminho Mais Curto
@@ -18,6 +19,7 @@ public class AlgoritmosEmGrafos extends Grafos {
     
     public AlgoritmosEmGrafos(int vertices) {
         super(vertices);
+        verticesTotais = vertices;
         distanciaProfundidade = new int[vertices];
         verticePredecessor = new int[vertices];
         
@@ -29,6 +31,9 @@ public class AlgoritmosEmGrafos extends Grafos {
         verticeAntecessorAGM = new int[vertices];
         arestasArvoreGeradoraMinima = new ArrayList <>();
         distanciasAGM = new int[vertices];
+        
+        caminhosDeAumentoFR = new ArrayList <>();
+        capacidadeResidual = new ArrayList <>();
     }
 
     // faz a busca em profundidade
@@ -160,7 +165,98 @@ public class AlgoritmosEmGrafos extends Grafos {
         
         return arvoreGeradoraMinima(vertice);
     }
-       
+    
+    private void caminhoMaiorFluxo(int verticeInicial, int verticeFinal, int[] verticePai, int[] verticeConhecido, int[] verticePeso) {
+        verticeConhecido[verticeInicial] = 1;
+        int proxVertice = verticeInicial;
+        
+        for (int i=0; i<verticesTotais; i++) {
+            if (super.matrizAdjacencia[verticeInicial][i] != 0) {
+                if(verticePeso[i] < super.matrizAdjacencia[verticeInicial][i]) {
+                    verticePeso[i] = super.matrizAdjacencia[verticeInicial][i];
+                    verticePai[i] = verticeInicial;
+                    proxVertice = i;
+                }
+            }
+        }
+        for (int i=0; i<verticesTotais; i++) {
+            if (verticePeso[proxVertice]<verticePeso[i] && super.matrizAdjacencia[verticeInicial][i]!=0 && verticeConhecido[i]==0) {
+                proxVertice = i;
+            }
+        }
+        if (proxVertice == verticeInicial || verticeConhecido[proxVertice]==1){
+        } else {
+            caminhoMaiorFluxo(proxVertice, verticeFinal, verticePai, verticeConhecido, verticePeso);
+        }
+    }
+
+    // Implementa o algoritmo de Ford-Fulkeson
+    private int fluxoMaximoEmRedes(int verticeInicial, int verticeFinal) {
+        int[] verticePai = new int [verticesTotais];
+        int[] verticeConhecido = new int [verticesTotais];
+        int[] verticePeso = new int [verticesTotais];
+        ArrayList <Integer> caminhoPais = new ArrayList<>();
+        int verticeMenorPeso = 0;
+        int iteracao = 0;
+        
+        while(true){
+            for (int i=0; i < verticesTotais; i++) {
+                verticePai[i] = -1;
+                verticeConhecido[i] = 0;
+                verticePeso[i] = Integer.MIN_VALUE;
+            }
+            caminhoPais = new ArrayList<>();
+            caminhoMaiorFluxo(verticeInicial, verticeFinal, verticePai, verticeConhecido, verticePeso);
+            verticeMenorPeso = verticeFinal;
+            int i = verticePai[verticeFinal];
+            caminhoPais.add(verticeFinal);
+            
+//            System.out.println("Pai:");
+//            for (int j=0; j < verticesTotais; j++) {
+//                System.out.println(verticePai[j]);
+//            }
+
+            while (i != verticeInicial && i != -1) {
+                caminhoPais.add(i);
+                if (verticePeso[i]<verticePeso[verticeMenorPeso]) {
+                    verticeMenorPeso = i;
+                }
+                i = verticePai[i];
+            }
+            
+            //System.out.println("Menor peso do caminho: " + verticePeso[verticeMenorPeso]);
+
+            if (i==verticeInicial) {
+                i = verticeFinal;
+                while (i != verticeInicial) {
+                    super.setPeso(verticePai[i], i, super.matrizAdjacencia[verticePai[i]][i] - verticePeso[verticeMenorPeso]);
+                    i = verticePai[i];
+                }
+            } else {
+                break;
+            }
+            
+            caminhoPais.add(verticeInicial);
+            capacidadeResidual.add(verticePeso[verticeMenorPeso]);
+            caminhosDeAumentoFR.add(iteracao, caminhoPais);
+            iteracao++;
+        }
+        return iteracao-1;
+    }
+    
+    // Inicia o algoritmo de fluxo em rede, retorna a quantidade de caminhos em fluxo realizadas
+    public int iniciaFluxoMaximoEmRedes(int verticeInicial, int verticeFinal) {
+        return fluxoMaximoEmRedes(verticeInicial, verticeFinal);
+    }
+    
+    public ArrayList < ArrayList < Integer >> getCaminhosFluxoRedes() {
+        return caminhosDeAumentoFR;
+    }
+    
+    public ArrayList < Integer > getArestaMenorPeso() {
+        return capacidadeResidual;
+    }
+    
     public int[] getVerticeAntecessorCMC() {
         return verticeAntecessorCMC;
     }

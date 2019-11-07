@@ -4,35 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.util.Pair;
+import javafx.util.Pair; // utilizado para AGM
 
 public class ListasDeGrafos {
 
     public static void main(String[] args) {
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
-        ArrayList < Pair < Integer, Integer >> arestasAGM = new ArrayList<>();
-        int pai[];
-        int distancias[];
+
+        grafo.iniciaFluxoMaximoEmRedes(0, 3);
+        ArrayList < ArrayList < Integer >> caminhosDeAumentoFR = grafo.getCaminhosFluxoRedes();
+        ArrayList < Integer> caminhoResidual = grafo.getArestaMenorPeso();
         
-        int peso = grafo.iniciaArvoreGeradoraMinima(3);
-        pai = grafo.getVerticeAntecessorAGM();
-        distancias = grafo.getPesoAGM();
-        arestasAGM = grafo.getArestasAGM();
-        
-        System.out.println("Vetor de pais:");
-        for(int i=0; i<pai.length; i++){
-            System.out.println(pai[i]);
+        for (int i=0; i<caminhosDeAumentoFR.size(); i++){
+            System.out.println("Caminho no grafo(invertido): " + caminhosDeAumentoFR.get(i));
+            System.out.println("Peso da menor aresta: " + caminhoResidual.get(i) + "\n");
         }
         
-        System.out.println("\nPesos:");
-        for(int i=0; i<pai.length; i++){
-            System.out.println(distancias[i]);
-        }
-        
-        System.out.println("\nPeso total: " + peso + "\n");
-        for(Pair aresta : arestasAGM){
-            System.out.println(aresta.toString());
-        }
     }
     
     /**
@@ -102,7 +89,7 @@ public class ListasDeGrafos {
                 vertices[1] = Integer.parseInt(linha.split(" ")[1]);
                 peso = Integer.parseInt(linha.split(" ")[2]);
                 //System.out.println(vertices[0] + " " + vertices[1] + " " + peso);
-                grafo.insereArestaNaoOrientada(vertices[0], vertices[1], peso);
+                grafo.insereAresta(vertices[0], vertices[1], peso);
                 
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
