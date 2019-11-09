@@ -1,7 +1,6 @@
 package listasdegrafos;
 
 import java.util.ArrayList;
-import javafx.util.Pair;
 
 public class AlgoritmosEmGrafos extends Grafos {
 
@@ -11,7 +10,7 @@ public class AlgoritmosEmGrafos extends Grafos {
     private final int[] distanciasCMC; // CMC-> Caminho Mais Curto
     private final int[] verticeAntecessorCMC;
     private final int[] verticeConhecido;
-    private final ArrayList < Pair < Integer, Integer >> arestasArvoreGeradoraMinima; 
+    //private final ArrayList < Pair < Integer, Integer >> arestasArvoreGeradoraMinima; 
     private final int[] verticeAntecessorAGM;
     private final int[] distanciasAGM;
     private final ArrayList < ArrayList < Integer >> caminhosDeAumentoFR; //armazena caminhos de aumento
@@ -29,7 +28,7 @@ public class AlgoritmosEmGrafos extends Grafos {
         verticeConhecido = new int[vertices];
         
         verticeAntecessorAGM = new int[vertices];
-        arestasArvoreGeradoraMinima = new ArrayList <>();
+        //arestasArvoreGeradoraMinima = new ArrayList <>();
         distanciasAGM = new int[vertices];
         
         caminhosDeAumentoFR = new ArrayList <>();
@@ -147,7 +146,7 @@ public class AlgoritmosEmGrafos extends Grafos {
         }
         
         if (proxVertice != vertice) {
-            arestasArvoreGeradoraMinima.add(new Pair(verticeAntecessorAGM[proxVertice], proxVertice));
+            //arestasArvoreGeradoraMinima.add(new Pair(verticeAntecessorAGM[proxVertice], proxVertice));
             peso += arvoreGeradoraMinima(proxVertice);
         }
         
@@ -172,6 +171,11 @@ public class AlgoritmosEmGrafos extends Grafos {
         
         for (int i=0; i<verticesTotais; i++) {
             if (super.matrizAdjacencia[verticeInicial][i] != 0) {
+                if (verticeConhecido[i] == 0) {
+                    verticePeso[i] = super.matrizAdjacencia[verticeInicial][i];
+                    verticePai[i] = verticeInicial;
+                    caminhoMaiorFluxo(i, verticeFinal, verticePai, verticeConhecido, verticePeso);
+                }
                 if(verticePeso[i] < super.matrizAdjacencia[verticeInicial][i]) {
                     verticePeso[i] = super.matrizAdjacencia[verticeInicial][i];
                     verticePai[i] = verticeInicial;
@@ -269,9 +273,9 @@ public class AlgoritmosEmGrafos extends Grafos {
         return verticePredecessor;
     }
     
-    public ArrayList<Pair<Integer, Integer>> getArestasAGM() {
-        return arestasArvoreGeradoraMinima;
-    }
+//    public ArrayList<Pair<Integer, Integer>> getArestasAGM() {
+//        return arestasArvoreGeradoraMinima;
+//    }
 
     public int[] getVerticeAntecessorAGM() {
         return verticeAntecessorAGM;

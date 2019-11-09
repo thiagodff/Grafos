@@ -4,21 +4,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.util.Pair; // utilizado para AGM
+//import javafx.util.Pair; // utilizado para AGM
 
 public class ListasDeGrafos {
 
     public static void main(String[] args) {
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
-
-        grafo.iniciaFluxoMaximoEmRedes(0, 3);
+        int fluxoTotal = 0;
+        
+        grafo.iniciaFluxoMaximoEmRedes(0, 5);
         ArrayList < ArrayList < Integer >> caminhosDeAumentoFR = grafo.getCaminhosFluxoRedes();
         ArrayList < Integer> caminhoResidual = grafo.getArestaMenorPeso();
         
         for (int i=0; i<caminhosDeAumentoFR.size(); i++){
             System.out.println("Caminho no grafo(invertido): " + caminhosDeAumentoFR.get(i));
             System.out.println("Peso da menor aresta: " + caminhoResidual.get(i) + "\n");
+            fluxoTotal += caminhoResidual.get(i);
         }
+        System.out.println("Fluxo Total: " + fluxoTotal);
         
     }
     
