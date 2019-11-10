@@ -176,7 +176,7 @@ public class AlgoritmosEmGrafos extends Grafos {
                     verticePai[i] = verticeInicial;
                     caminhoMaiorFluxo(i, verticeFinal, verticePai, verticeConhecido, verticePeso);
                 }
-                if(verticePeso[i] < super.matrizAdjacencia[verticeInicial][i]) {
+                if(verticePeso[i] <= super.matrizAdjacencia[verticeInicial][i]) {
                     verticePeso[i] = super.matrizAdjacencia[verticeInicial][i];
                     verticePai[i] = verticeInicial;
                     proxVertice = i;

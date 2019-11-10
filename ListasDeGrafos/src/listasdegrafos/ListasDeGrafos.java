@@ -9,19 +9,38 @@ import java.util.ArrayList;
 public class ListasDeGrafos {
 
     public static void main(String[] args) {
+        int [][] matrizAdj;
         AlgoritmosEmGrafos grafo = lerArquivo(args[0]);
         int fluxoTotal = 0;
         
-        grafo.iniciaFluxoMaximoEmRedes(0, 5);
+        matrizAdj = new int [grafo.numeroVertices][grafo.numeroVertices];
+        for (int i=0 ;i<grafo.numeroVertices; i++)
+                for (int j=0 ;j<grafo.numeroVertices; j++)
+                    matrizAdj[i][j] = grafo.getPeso(i, j);
+        
+        grafo.iniciaFluxoMaximoEmRedes(0, 7);
         ArrayList < ArrayList < Integer >> caminhosDeAumentoFR = grafo.getCaminhosFluxoRedes();
         ArrayList < Integer> caminhoResidual = grafo.getArestaMenorPeso();
         
         for (int i=0; i<caminhosDeAumentoFR.size(); i++){
-            System.out.println("Caminho no grafo(invertido): " + caminhosDeAumentoFR.get(i));
-            System.out.println("Peso da menor aresta: " + caminhoResidual.get(i) + "\n");
+            System.out.println("Caminho de aumento no grafo(invertido): " + caminhosDeAumentoFR.get(i) );
+            System.out.println("Capacidade residual: " + caminhoResidual.get(i) + "\n");
             fluxoTotal += caminhoResidual.get(i);
         }
         System.out.println("Fluxo Total: " + fluxoTotal);
+        
+        System.out.println("\nCaminho de aumento:");
+        for (int i=0 ;i<grafo.numeroVertices; i++)
+            for (int j=0 ;j<grafo.numeroVertices; j++)
+                if (matrizAdj[i][j] != 0)
+                    System.out.println( i + "->" + j + " peso: " + (matrizAdj[i][j]-grafo.getPeso(i, j)));        
+        
+        System.out.println("\nGrafo residual:");
+        for (int i=0 ;i<grafo.numeroVertices; i++)
+            for (int j=0 ;j<grafo.numeroVertices; j++)
+                if (matrizAdj[i][j] != 0)
+                    System.out.println( i + "->" + j + " peso: " + grafo.getPeso(i, j));
+                
         
     }
     
@@ -83,7 +102,7 @@ public class ListasDeGrafos {
             String linha = lerArq.readLine();
             vertices[0] = Integer.parseInt(linha.split(" ")[0]);
             vertices[1] = Integer.parseInt(linha.split(" ")[1]);
-                
+                    
             AlgoritmosEmGrafos grafo = new AlgoritmosEmGrafos(vertices[0]);
             linha = lerArq.readLine();
             //System.out.println(vertices[0] + " " + vertices[1]);
@@ -93,7 +112,6 @@ public class ListasDeGrafos {
                 peso = Integer.parseInt(linha.split(" ")[2]);
                 //System.out.println(vertices[0] + " " + vertices[1] + " " + peso);
                 grafo.insereAresta(vertices[0], vertices[1], peso);
-                
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
             arq.close();
